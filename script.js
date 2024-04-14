@@ -1,6 +1,12 @@
 function printpdf() {
     var content = document.getElementById("resume");
-  
+
+    // Hide skill buttons before generating PDF
+    var skillAddButton = document.getElementById("skilladd");
+    var skillRemButton = document.getElementById("skillrem");
+    skillAddButton.style.display = "none";
+    skillRemButton.style.display = "none";
+
     const allButtons = document.querySelectorAll("#print button");
     allButtons.forEach(button => {
         button.classList.add("none");
@@ -9,18 +15,29 @@ function printpdf() {
     allInputCheckboxes.forEach(input => {
         input.classList.add("none");
     })
-  
-  allButtons.forEach(button => {
-      button.classList.remove("none");
-  })
-  allInputCheckboxes.forEach(input => {
-      input.classList.remove("none");
-  })
+
+    html2pdf(content, {
+        html2canvas: { scale: 1, logging: true, dpi: 500 },
+        onAfterPrint: () => {
+            // Show skill buttons after generating PDF
+            skillAddButton.style.display = "inline-block";
+            skillRemButton.style.display = "inline-block";
+
+            allButtons.forEach(button => {
+                button.classList.remove("none");
+            });
+            allInputCheckboxes.forEach(input => {
+                input.classList.remove("none");
+            });
+        }
+    });
+}
+
   
     html2pdf(content, {
         html2canvas: { scale: 1, logging: true, dpi: 500 }
     });
-  }
+  
   
   function addedu() {
     const head = document.createElement('div');
